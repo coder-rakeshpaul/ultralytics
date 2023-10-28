@@ -1,7 +1,6 @@
 # Ultralytics YOLO 🚀, AGPL-3.0 license
 
 import inspect
-import torch
 import sys
 from pathlib import Path
 from typing import Union
@@ -184,26 +183,9 @@ class Model(nn.Module):
     # def load(self, weights='yolov8n.pt'):
     #     """Transfers parameters with matching names and shapes from 'weights' to model."""
     #     self._check_is_pytorch_model()
-    #     if isinstance(weights, (str, Path)):
-    #         weights, self.ckpt = attempt_load_one_weight(weights)
-    #     self.model.load(weights)
-    #     return self
-
-    def load(self, weights='yolov8n.pt'):
-        """Transfers parameters with matching names and shapes from 'weights' to model."""
-        self._check_is_pytorch_model()
         if isinstance(weights, (str, Path)):
             weights, self.ckpt = attempt_load_one_weight(weights)
-        
-        checkpoint = torch.load(weights)  # Load the entire checkpoint
-
-        self.model.load_state_dict(checkpoint['model'])  # Load the model's state
-        self.ckpt = checkpoint  # Store the loaded checkpoint
-
-        # Check if 'optimizer' exists in the checkpoint and load it if it does
-        if 'optimizer' in checkpoint:
-            self.optimizer.load_state_dict(checkpoint['optimizer'])
-
+        self.model.load(weights)
         return self
 
     def info(self, detailed=False, verbose=True):

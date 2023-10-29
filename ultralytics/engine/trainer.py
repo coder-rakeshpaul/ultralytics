@@ -273,18 +273,18 @@ class BaseTrainer:
                                               decay=weight_decay,
                                               iterations=iterations)
         
-        # try:
-        #     print('inside try')
-        #     if ckpt is not None:
-        #         if ckpt['optimizer'] is not None:
-        #             self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
-        #             best_fitness = ckpt.get('best_fitness', best_fitness)
-        #         if self.ema and ckpt.get('ema'):
-        #             self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
-        #             self.ema.updates = ckpt.get('updates', self.ema.updates)
-        #         print('loaded the optimizer')
-        # except Exception as e:
-        #     print(f"An error occurred while loading the optimizer: {str(e)}")
+        try:
+            print('inside try')
+            if ckpt is not None:
+                if ckpt['optimizer'] is not None:
+                    self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
+                    best_fitness = ckpt.get('best_fitness', best_fitness)
+                if self.ema and ckpt.get('ema'):
+                    self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
+                    self.ema.updates = ckpt.get('updates', self.ema.updates)
+                print('loaded the optimizer')
+        except Exception as e:
+            print(f"An error occurred while loading the optimizer: {str(e)}")
 
 
 

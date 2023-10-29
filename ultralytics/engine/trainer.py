@@ -227,6 +227,8 @@ class BaseTrainer:
                             'See ultralytics.engine.trainer for customization of frozen layers.')
                 v.requires_grad = True
 
+
+
         # Check AMP
         self.amp = torch.tensor(self.args.amp).to(self.device)  # True or False
         if self.amp and RANK in (-1, 0):  # Single-GPU and DDP
@@ -270,6 +272,20 @@ class BaseTrainer:
                                               momentum=self.args.momentum,
                                               decay=weight_decay,
                                               iterations=iterations)
+        
+        # best_fitness = 0.0
+        # start_epoch = ckpt['epoch'] + 1
+
+        print('trying to load the optimizer')
+        if ckpt['optimizer'] is not None:
+            self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
+            best_fitness = ckpt['best_fitness']
+        if self.ema and ckpt.get('ema'):
+            self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
+            self.ema.updates = ckpt['updates']
+
+        print('loaded the optimizer')
+
         # Scheduler
         if self.args.cos_lr:
             self.lf = one_cycle(1, self.args.lrf, self.epochs)  # cosine 1->hyp['lrf']

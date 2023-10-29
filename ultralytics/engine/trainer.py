@@ -275,18 +275,19 @@ class BaseTrainer:
         
         # best_fitness = 0.0
         # start_epoch = ckpt['epoch'] + 1
-
         print('trying to load the optimizer')
         try:
-            if ckpt['optimizer'] is not None:
-                self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
-                best_fitness = ckpt['best_fitness']
-            if self.ema and ckpt.get('ema'):
-                self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
-                self.ema.updates = ckpt['updates']
-            print('loaded the optimizer')
+            if ckpt is not None:
+                if ckpt['optimizer'] is not None:
+                    self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
+                    best_fitness = ckpt.get('best_fitness', best_fitness)  # Use the default value if 'best_fitness' is not in the checkpoint
+                if self.ema and ckpt.get('ema'):
+                    self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
+                    self.ema.updates = ckpt.get('updates', self.ema.updates)  # Use the default value if 'updates' is not in the checkpoint
+                print('loaded the optimizer')
         except:
             pass
+
 
 
         # Scheduler

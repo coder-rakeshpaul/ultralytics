@@ -286,6 +286,7 @@ class BaseTrainer:
                     self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
                     self.ema.updates = ckpt.get('updates', self.ema.updates)
                 print('loaded the optimizer')
+            print(f"didn't load anything")
         except Exception as e:
             print(f"An error occurred while loading the optimizer: {str(e)}")
 

@@ -277,8 +277,11 @@ class BaseTrainer:
             print('inside try')
             if ckpt is not None:
                 if ckpt['optimizer'] is not None:
+                    print('reached here')
                     self.optimizer.load_state_dict(ckpt['optimizer'])  # optimizer
                     best_fitness = ckpt.get('best_fitness', best_fitness)
+
+                    print('reached here 2')
                 if self.ema and ckpt.get('ema'):
                     self.ema.ema.load_state_dict(ckpt['ema'].float().state_dict())  # EMA
                     self.ema.updates = ckpt.get('updates', self.ema.updates)
